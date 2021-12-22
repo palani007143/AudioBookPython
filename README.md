@@ -21,3 +21,6 @@ or
 pip install tk
 pip install pyttsx3
 pip install PyPDF2
+
+Finally:
+Python ProjectSourceCode.py

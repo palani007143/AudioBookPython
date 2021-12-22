@@ -3,13 +3,32 @@ import PyPDF2
 from tkinter import *   # Importing the GUI named tkinter
 from tkinter.filedialog import *
 from page_range import *
+engine = pyttsx3.init()  # Object creation
+audiotabclose = ''
 
-# Executing the command for text to speech
-def audio(pageRange):
-    # Label(root, text='Audiobook', font=('Comic Sans MS', 15)).pack(side=TOP, pady=10)
-    # Label.pack()
-    # root.mainloop()
-    engine = pyttsx3.init()  # Object creation
+
+def audio(pageRange, audiotab):
+    # Create a window
+    audiotabclose = audiotab
+
+    # Set Title as Image Loader
+    audiotab.title("Audio Player")
+
+    # Set the resolution of window
+    audiotab.geometry("550x300+300+150")
+
+    # Allow Window to be resizable
+    audiotab.resizable(width=True, height=True)
+    frame = Frame(audiotab)
+    frame.pack()
+    
+    redbutton = Button(frame, text="Stop Audio", fg="blue", font=('Comic Sans MS', 10), command=close_window_a)  # The window will get closed by the command
+    redbutton.pack( side = LEFT)
+
+    photo = PhotoImage(file="lisening.gif")  # Creating a photoimage object to use image . JPEG wouldn't work here
+    background_label = Label(audiotab, image=photo, text='Stop Audio')
+    background_label.place(x=0, y=35, relwidth=1, relheight=1)
+
     rate = engine.getProperty('rate')
     print (rate)  # Printing the current voice rate
     engine.setProperty('rate', 185)   # Setting up the new voice rate
@@ -22,8 +41,8 @@ def audio(pageRange):
     book=askopenfilename()
     pdfreader=PyPDF2.PdfFileReader(book)
     pages=pdfreader.numPages
-    a , b = get_text(pageRange)
     try:
+        a , b = get_text(pageRange)
         for num in range(a, b):
             page=pdfreader.getPage(num)
             text=page.extractText()
@@ -37,6 +56,14 @@ def audio(pageRange):
             player=pyttsx3.init()
             player.say(text)
             player.runAndWait()
-    engine.save_to_file(text, 'Audiobook created by Dolly.mp3')   # Saving the voice to a file 
-    engine.runAndWait()
-    print("Your audiobook file has been generated as an mp3 file. Check the project file directory for getting the file.")
+    finally:
+        engine.save_to_file(text, 'Audiobook created by Dolly.mp3')   # Saving the voice to a file 
+        engine.runAndWait()
+        print("Your audiobook file has been generated as an mp3 file. Check the project file directory for getting the file.")
+    audiotab.mainloop()
+
+def close_window_a():
+    engine.stop()
+    audiotabclose.destroy()
+
+    
