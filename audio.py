@@ -12,7 +12,7 @@ def audio(pageRange, audiotab):
     audiotabclose = audiotab
 
     # Set Title as Image Loader
-    audiotab.title("Audio Player")
+    audiotab.title("Audio Player Presented By Divya Barathi!")
 
     # Set the resolution of window
     audiotab.geometry("550x300+300+150")
